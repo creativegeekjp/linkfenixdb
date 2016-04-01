@@ -1,0 +1,92 @@
+2016-03-03 08:36:29 Error: [PDOException] SQLSTATE[28000] [1045] Access denied for user 'my_app'@'localhost' (using password: YES)
+Stack Trace:
+#0 /home/cgi2016/cakephp/bakeme/vendor/cakephp/cakephp/src/Database/Driver/PDODriverTrait.php(48): PDO->__construct('mysql:host=loca...', 'my_app', 'secret', Array)
+#1 /home/cgi2016/cakephp/bakeme/vendor/cakephp/cakephp/src/Database/Driver/Mysql.php(90): Cake\Database\Driver\Mysql->_connect('mysql:host=loca...', Array)
+#2 /home/cgi2016/cakephp/bakeme/vendor/cakephp/cakephp/src/Database/Schema/BaseSchema.php(45): Cake\Database\Driver\Mysql->connect()
+#3 /home/cgi2016/cakephp/bakeme/vendor/cakephp/cakephp/src/Database/Dialect/MysqlDialectTrait.php(63): Cake\Database\Schema\BaseSchema->__construct(Object(Cake\Database\Driver\Mysql))
+#4 /home/cgi2016/cakephp/bakeme/vendor/cakephp/cakephp/src/Database/Schema/Collection.php(52): Cake\Database\Driver\Mysql->schemaDialect()
+#5 /home/cgi2016/cakephp/bakeme/vendor/cakephp/cakephp/src/Database/Schema/CachedCollection.php(43): Cake\Database\Schema\Collection->__construct(Object(Cake\Database\Connection))
+#6 /home/cgi2016/cakephp/bakeme/vendor/cakephp/cakephp/src/Database/Connection.php(315): Cake\Database\Schema\CachedCollection->__construct(Object(Cake\Database\Connection), true)
+#7 /home/cgi2016/cakephp/bakeme/vendor/cakephp/bake/src/Shell/Task/ModelTask.php(919): Cake\Database\Connection->schemaCollection()
+#8 /home/cgi2016/cakephp/bakeme/vendor/cakephp/bake/src/Shell/Task/ModelTask.php(874): Bake\Shell\Task\ModelTask->_getAllTables()
+#9 /home/cgi2016/cakephp/bakeme/vendor/cakephp/bake/src/Shell/Task/ModelTask.php(888): Bake\Shell\Task\ModelTask->listAll()
+#10 /home/cgi2016/cakephp/bakeme/vendor/cakephp/bake/src/Shell/BakeShell.php(228): Bake\Shell\Task\ModelTask->listUnskipped()
+#11 [internal function]: Bake\Shell\BakeShell->all()
+#12 /home/cgi2016/cakephp/bakeme/vendor/cakephp/cakephp/src/Console/Shell.php(444): call_user_func_array(Array, Array)
+#13 /home/cgi2016/cakephp/bakeme/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(217): Cake\Console\Shell->runCommand(Array, true, Array)
+#14 /home/cgi2016/cakephp/bakeme/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(181): Cake\Console\ShellDispatcher->_dispatch(Array)
+#15 /home/cgi2016/cakephp/bakeme/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(127): Cake\Console\ShellDispatcher->dispatch(Array)
+#16 /home/cgi2016/cakephp/bakeme/bin/cake.php(33): Cake\Console\ShellDispatcher::run(Array)
+#17 {main}
+
+
+2016-03-04 08:35:23 Error: [Cake\Console\Exception\MissingShellException] Shell class for "Sever" could not be found.
+Exception Attributes: array (
+  'class' => 'Sever',
+)
+Stack Trace:
+#0 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(214): Cake\Console\ShellDispatcher->findShell('sever')
+#1 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(181): Cake\Console\ShellDispatcher->_dispatch(Array)
+#2 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(127): Cake\Console\ShellDispatcher->dispatch(Array)
+#3 /workspace/LinkFenix/bin/cake.php(33): Cake\Console\ShellDispatcher::run(Array)
+#4 {main}
+
+
+2016-03-04 08:35:28 Error: [Cake\Console\Exception\MissingShellException] Shell class for "Sever" could not be found.
+Exception Attributes: array (
+  'class' => 'Sever',
+)
+Stack Trace:
+#0 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(214): Cake\Console\ShellDispatcher->findShell('sever')
+#1 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(181): Cake\Console\ShellDispatcher->_dispatch(Array)
+#2 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(127): Cake\Console\ShellDispatcher->dispatch(Array)
+#3 /workspace/LinkFenix/bin/cake.php(33): Cake\Console\ShellDispatcher::run(Array)
+#4 {main}
+
+
+2016-03-07 03:04:31 Error: [Cake\Database\Exception] SQLSTATE[42S02]: Base table or view not found: 1146 Table 'linkFenix.services' doesn't exist
+Stack Trace:
+#0 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Database/Schema/Collection.php(96): Cake\Database\Schema\Collection->_reflect('Column', 'services', Array, Object(Cake\Database\Schema\Table))
+#1 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Database/Schema/CachedCollection.php(64): Cake\Database\Schema\Collection->describe('services', Array)
+#2 /workspace/LinkFenix/vendor/cakephp/cakephp/src/ORM/Table.php(429): Cake\Database\Schema\CachedCollection->describe('services')
+#3 /workspace/LinkFenix/vendor/cakephp/cakephp/src/ORM/Table.php(505): Cake\ORM\Table->schema()
+#4 /workspace/LinkFenix/vendor/cakephp/bake/src/Shell/Task/ModelTask.php(206): Cake\ORM\Table->primaryKey()
+#5 /workspace/LinkFenix/vendor/cakephp/bake/src/Shell/Task/ModelTask.php(124): Bake\Shell\Task\ModelTask->getAssociations(Object(Cake\ORM\Table))
+#6 /workspace/LinkFenix/vendor/cakephp/bake/src/Shell/Task/ModelTask.php(109): Bake\Shell\Task\ModelTask->getTableContext(Object(Cake\ORM\Table), 'services', 'Services')
+#7 /workspace/LinkFenix/vendor/cakephp/bake/src/Shell/Task/ModelTask.php(96): Bake\Shell\Task\ModelTask->bake('Services')
+#8 /workspace/LinkFenix/vendor/cakephp/bake/src/Shell/BakeShell.php(250): Bake\Shell\Task\ModelTask->main('Services')
+#9 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Collection/CollectionTrait.php(51): Bake\Shell\BakeShell->Bake\Shell\{closure}('services', 0)
+#10 /workspace/LinkFenix/vendor/cakephp/bake/src/Shell/BakeShell.php(253): Cake\Collection\Collection->each(Object(Closure))
+#11 [internal function]: Bake\Shell\BakeShell->all('services')
+#12 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/Shell.php(444): call_user_func_array(Array, Array)
+#13 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(217): Cake\Console\Shell->runCommand(Array, true, Array)
+#14 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(181): Cake\Console\ShellDispatcher->_dispatch(Array)
+#15 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(127): Cake\Console\ShellDispatcher->dispatch(Array)
+#16 /workspace/LinkFenix/bin/cake.php(33): Cake\Console\ShellDispatcher::run(Array)
+#17 {main}
+
+
+2016-03-07 03:04:52 Error: [Cake\Console\Exception\MissingShellException] Shell class for "Start" could not be found.
+Exception Attributes: array (
+  'class' => 'Start',
+)
+Stack Trace:
+#0 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(214): Cake\Console\ShellDispatcher->findShell('start')
+#1 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(181): Cake\Console\ShellDispatcher->_dispatch(Array)
+#2 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(127): Cake\Console\ShellDispatcher->dispatch(Array)
+#3 /workspace/LinkFenix/bin/cake.php(33): Cake\Console\ShellDispatcher::run(Array)
+#4 {main}
+
+
+2016-03-07 03:05:08 Error: [Cake\Console\Exception\MissingShellException] Shell class for "Start" could not be found.
+Exception Attributes: array (
+  'class' => 'Start',
+)
+Stack Trace:
+#0 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(214): Cake\Console\ShellDispatcher->findShell('start')
+#1 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(181): Cake\Console\ShellDispatcher->_dispatch(Array)
+#2 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(127): Cake\Console\ShellDispatcher->dispatch(Array)
+#3 /workspace/LinkFenix/bin/cake.php(33): Cake\Console\ShellDispatcher::run(Array)
+#4 {main}
+
+
