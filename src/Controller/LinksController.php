@@ -44,6 +44,53 @@ class LinksController extends AppController
         $this->set('_serialize', ['link']);
     } 
     
+    /*
+    * get links by movie id
+    *
+    */
+    public function getmovielinks($id = null)
+    {
+        if($id == null) exit;
+        
+        $conditions = array(
+            'conditions' => array(
+                'or' => array(
+                    'movie_id LIKE' => $id
+                )
+            )
+        );
+    
+        $movies_links = $this->Links->find('all',$conditions);
+    
+        echo json_encode($movies_links);
+        
+        exit;
+
+    }
+    /*
+    * get links by tvshows episodes
+    *
+    */
+    public function gettvlinks($id = null)
+    {
+        
+        if($id == null) exit;
+         
+        $conditions = array(
+            'conditions' => array(
+                'or' => array(
+                    'episode_id LIKE' => $id
+                )
+            )
+        );
+    
+        $episodes_links = $this->Links->find('all',$conditions);
+    
+        echo json_encode($episodes_links);
+        
+        exit;
+
+    }
     /**
      * Add method
      *

@@ -90,3 +90,15 @@ Stack Trace:
 #4 {main}
 
 
+2016-04-04 01:57:02 Error: [Cake\Console\Exception\MissingShellException] Shell class for "Servier" could not be found.
+Exception Attributes: array (
+  'class' => 'Servier',
+)
+Stack Trace:
+#0 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(214): Cake\Console\ShellDispatcher->findShell('servier')
+#1 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(181): Cake\Console\ShellDispatcher->_dispatch(Array)
+#2 /workspace/LinkFenix/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(127): Cake\Console\ShellDispatcher->dispatch(Array)
+#3 /workspace/LinkFenix/bin/cake.php(33): Cake\Console\ShellDispatcher::run(Array)
+#4 {main}
+
+
