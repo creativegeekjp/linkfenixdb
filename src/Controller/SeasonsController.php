@@ -1,6 +1,6 @@
 <?php
 namespace App\Controller;
-
+use Cake\ORM\TableRegistry;
 use App\Controller\AppController;
 
 /**
@@ -40,6 +40,7 @@ class SeasonsController extends AppController
         $this->set('season', $season);
         $this->set('_serialize', ['season']);
     }
+    
     public function viewrest($id = null)
     {
         $tvshow = $this->Seasons->get($id, [
@@ -48,7 +49,96 @@ class SeasonsController extends AppController
 
         echo json_encode($tvshow);
         exit;
-    }        
+    }
+    /*
+    * query those latest episodes and return its tvshow_id and created
+    */
+    public function getlatesepisodes()
+    {  
+        
+         $tvshowS= TableRegistry::get('tvshows');
+          
+        $query = $this->Seasons->find('all', [
+            'contain' => ['Episodes']
+        ]);
+        
+        foreach($query as $key => $queries)
+        {
+                $i= 0;
+                
+                $tmp = array();
+                
+                foreach($queries['episodes'] as $key => $v)
+                {
+                    $tmp[$key+1] =  date('Y-m-d',strtotime($v['created']));
+                }
+                $i++;
+                
+                foreach(array_unique($tmp) as $key => $res)
+                {
+                    if( $res >= date("Y-m-d") )
+                    {
+                          $lista = $tvshowS->find('all')->where(['id =' => $queries['tvshow_id'] ]) ;
+                           
+                          foreach ($lista as $value) 
+                          {
+                                $arr[] = array('id' => $value['id'] , 'name' => $value['name']);
+                           }
+                           
+                       
+                    }
+                 
+                }
+                        
+        }
+        
+        echo json_encode(  $arr );
+       
+        exit;
+    }
+    
+    public function getlateseasons($id=null)
+    {  
+        
+        // $episodesS= TableRegistry::get('episodes');
+          
+        // $query = $this->Seasons->find('all', [
+        //     'contain' => ['Episodes']
+        // ]);
+        
+        // foreach($query as $key => $queries)
+        // {
+        //         $i= 0;
+                
+        //         $tmp = array();
+                
+        //         foreach($queries['episodes'] as $key => $v)
+        //         {
+        //             $tmp[$key+1] =  $v['season_id'];
+        //         }
+        //         $i++;
+                
+        //         foreach($tmp as $key => $res)
+        //         {
+                   
+        //                   $lista = $episodesS->find('all')->where(['season_id =' => $id ]) ;
+                           
+        //                   foreach ($lista as $value) 
+        //                   {
+        //                         $arr[] = array('id' => $value['id'] , 'name' => $value['name']);
+        //                   }
+                           
+                       
+                    
+                 
+        //         }
+                        
+        // }
+        
+        // echo json_encode(  $arr );
+       
+        // exit;
+    }
 
     /**
      * Add method

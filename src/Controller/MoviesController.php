@@ -172,9 +172,7 @@ class MoviesController extends AppController
         
         
         if($keyword == null) exit;
-        // else
-        //   $keyword = parse_str($keyword);// str_replace('%', ' ', $keyword);
-        
+       
         $movieS = TableRegistry::get('movies');
         $tvshowS= TableRegistry::get('tvshows');
         $seasonS = TableRegistry::get('seasons');
@@ -186,39 +184,31 @@ class MoviesController extends AppController
                     'name LIKE' => "$keyword%"
                 )
             )
+            
         );
     
         $mov['mov'] =$movieS->find('all',$conditions);
         
         $tv = $tvshowS->find('all',$conditions);
     
-        
-        if(is_array($tv) || is_object($tv))
-        {
-             foreach($tv as $row1)
+      
+             foreach($tv  as $row1)
                 {
-                  $season = $seasonS->find('all')->where(['tvshow_id =' => $row1->id ]);
-                }
-        }
-         if(is_array($season) || is_object($season))
-                        {
-                             foreach($season as $row2)
+                  
+                        foreach($seasonS->find('all')->where(['tvshow_id =' => $row1->id ]) as $key => $row2)
                                 {
+                                 
                                   $episode['tv'][] = $episodeS->find()->select(['id','name','title'])->where(['season_id =' => $row2->id ]);
                                 
                                 }
+                }
+      
+                         
                               
-                        }
-     
-        // if($episode==null)
-        // {
-        //   $movie = $mov ;
-        // }
-        // else
-        //{
-          $movie = array_merge($mov,$episode);
-        //}
-        
+                        
+                        
+        $movie = array_merge($mov,$episode);
+
         echo json_encode($movie);
         
         exit;
