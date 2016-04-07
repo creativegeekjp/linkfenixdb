@@ -157,63 +157,7 @@ class MoviesController extends AppController
         $this->set('_serialize', ['movie']);
     }
 
-    /*
-    *
-    * Autosuggest for movies and tvshows
-    *
-    */
-    public function search($keyword = null)
-    {
-        
-        $mov = array();
-        $episode = array();
-        $season = "";
-        $name = "";
-        
-        
-        if($keyword == null) exit;
-       
-        $movieS = TableRegistry::get('movies');
-        $tvshowS= TableRegistry::get('tvshows');
-        $seasonS = TableRegistry::get('seasons');
-        $episodeS = TableRegistry::get('episodes');
-        
-        $conditions = array(
-            'conditions' => array(
-                'or' => array(
-                    'name LIKE' => "$keyword%"
-                )
-            )
-            
-        );
-    
-        $mov['mov'] =$movieS->find('all',$conditions);
-        
-        $tv = $tvshowS->find('all',$conditions);
-    
-      
-             foreach($tv  as $row1)
-                {
-                  
-                        foreach($seasonS->find('all')->where(['tvshow_id =' => $row1->id ]) as $key => $row2)
-                                {
-                                 
-                                  $episode['tv'][] = $episodeS->find()->select(['id','name','title'])->where(['season_id =' => $row2->id ]);
-                                
-                                }
-                }
-      
-                         
-                              
-                        
-                        
-        $movie = array_merge($mov,$episode);
-
-        echo json_encode($movie);
-        
-        exit;
-
-    }
+   
     
     /*
     */
@@ -255,7 +199,29 @@ class MoviesController extends AppController
         exit;
 
     }
-   
+    /*
+    *  count latest movies in the database
+    *
+    */
+    public function latestmovies()
+    {
+        $lmovies = $this->Movies->find('all');
+        
+         foreach($lmovies as $key => $res)
+                {
+                    if(   date('Y-m-d',strtotime($res['created']))  >= date("Y-m-d") )
+                    {
+                        $arr[]  = array('id' => $res['id']);
+                       
+                    }
+                 
+                }
+                
+        echo json_encode($arr);
+        
+        exit;
+    }
+    
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);

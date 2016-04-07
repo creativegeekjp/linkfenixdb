@@ -56,6 +56,42 @@ class SeasonsController extends AppController
     public function getlatesepisodes()
     {  
         
+        $tvshowS= TableRegistry::get('tvshows');
+          
+        $query = $this->Seasons->find('all', [
+            'contain' => ['Episodes']
+        ]);
+        
+        foreach($query as $key => $queries)
+        {
+              
+                foreach($queries['episodes'] as $key => $v)
+                {
+                     if(date('Y-m-d',strtotime($v['created'])) >= date("Y-m-d")  )
+                     {
+                         $arrs[] = $queries['tvshow_id'];
+                     }
+                }
+        }
+ 
+        foreach(array_unique($arrs) as $key => $res)
+        {
+           
+                  $lista = $tvshowS->find('all')->where(['id =' => $res ]) ;
+                
+                    foreach ($lista as $value) 
+                        {
+                                 $arr[] = array('id' => $value['id'] , 'name' => $value['name']);
+                        }
+            
+         
+        }
+        echo json_encode(  $arr );
+       
+        exit;
+    }
+    public function episodesindicator()
+    {
          $tvshowS= TableRegistry::get('tvshows');
           
         $query = $this->Seasons->find('all', [
@@ -65,6 +101,7 @@ class SeasonsController extends AppController
         foreach($query as $key => $queries)
         {
                 $i= 0;
+                $count = 0;
                 
                 $tmp = array();
                 
@@ -74,7 +111,7 @@ class SeasonsController extends AppController
                 }
                 $i++;
                 
-                foreach(array_unique($tmp) as $key => $res)
+                foreach($tmp as $key => $res)
                 {
                     if( $res >= date("Y-m-d") )
                     {
@@ -82,7 +119,8 @@ class SeasonsController extends AppController
                            
                           foreach ($lista as $value) 
                           {
-                                $arr[] = array('id' => $value['id'] , 'name' => $value['name']);
+                             
+                                $arr[] = array('id' =>  $value['id']);
                            }
                            
                        
@@ -96,50 +134,96 @@ class SeasonsController extends AppController
        
         exit;
     }
-    
-    public function getlateseasons($id=null)
+    /*
+    * get the latest episodes according to its date created
+    */
+    public function getlateseasonseepi($id=null)
     {  
+        $query = $this->Seasons->find('all', ['contain' => ['Episodes','Tvshows']])->where(['tvshow_id' => $id ]);
         
-        // $episodesS= TableRegistry::get('episodes');
-          
-        // $query = $this->Seasons->find('all', [
-        //     'contain' => ['Episodes']
-        // ]);
-        
-        // foreach($query as $key => $queries)
-        // {
-        //         $i= 0;
-                
-        //         $tmp = array();
-                
-        //         foreach($queries['episodes'] as $key => $v)
-        //         {
-        //             $tmp[$key+1] =  $v['season_id'];
-        //         }
-        //         $i++;
-                
-        //         foreach($tmp as $key => $res)
-        //         {
-                   
-        //                   $lista = $episodesS->find('all')->where(['season_id =' => $id ]) ;
-                           
-        //                   foreach ($lista as $value) 
-        //                   {
-        //                         $arr[] = array('id' => $value['id'] , 'name' => $value['name']);
-        //                   }
-                           
-                       
+        foreach ($query as $key => $value) {
+            
+                foreach($value['episodes'] as $key => $v)
+                {
+                     if(date('Y-m-d',strtotime($v['created'])) >= date("Y-m-d")  )
+                     {
+                          $arrs[] = $v['season_id'];
+                     }
                     
-                 
-        //         }
-                        
-        // }
+                }
+                
+                $ar = $value['tvshow']['name'];
+        }
+        foreach(array_unique($arrs) as $key => $res)
+        {
+                  $lista =  $this->Seasons->find('all')->where(['id =' => $res ]) ;
+                
+                    foreach ($lista as $value) 
+                        {
+                                 $arr[] = array(
+                                     'id' => $value['id'],
+                                     'name' => $ar , 'season_name' => $value['name'], 
+                                     'scode' => $value['scode']
+                                );
+                                
+                                
+                        }
+        }
+      
+        echo json_encode($arr);
         
-        // echo json_encode(  $arr );
-       
-        // exit;
+        exit;
     }
+    
+    public function getlatestepisodes($id = null )
+    {
+        
+         $Episodes = TableRegistry::get('episodes');
+          
+         $query = $Episodes->find('all')->where(['season_id' => $id]) ;
+         
+          foreach ($query as $key => $value) {
 
+                 if(date('Y-m-d',strtotime($value['created'])) >= date("Y-m-d")  )
+                 {
+                        $arrs[] = array('id' => $value['id'], 'ecode' => $value['ecode'] , 'title' => $value['title'] , 'episode_name' => $value['name']);
+                 }
+            }
+            
+          echo json_encode($arrs);
+        
+        exit;
+    }
+    /*
+     * search titile in the database
+     */
+     public function search($keyword = null)
+     {
+        $Movies = TableRegistry::get('movies');
+        
+        $arrs['mov'] = $Movies->find('all')->select(['id','name','year'])->where(['name LIKE' => "$keyword%"]);
+        
+        $query = $this->Seasons->find('all', ['contain' => ['Episodes','Tvshows']])->where(['Tvshows.name LIKE' => "$keyword%"]);
+        
+        foreach ($query as $key => $value) 
+        {
+            $tvname = $value['tvshow']['name'];
+            $scode = $value['scode'];   
+            
+            foreach($value['episodes'] as $key => $v)
+            {
+                $arrs['tv'][] = array('id'=> $v['id'], 'tvname' => $tvname, 'scode' => $scode, 'episode_name' => $v['name'], 'title' =>  $v['title'], 'ecode' => $v['ecode'] );
+           
+            }
+        }
+        
+        //$movie = array_merge($mov,$episode);
+
+        echo json_encode($arrs);
+        
+        
+        exit;
+     }
     /**
      * Add method
      *
@@ -162,14 +246,9 @@ class SeasonsController extends AppController
         $this->set(compact('season', 'episodes', 'tvshows'));
         $this->set('_serialize', ['season']);
     }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Season id.
-     * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
+    
+     
+     
     public function edit($id = null)
     {
         $season = $this->Seasons->get($id, [
