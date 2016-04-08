@@ -29,11 +29,7 @@ class MoviesController extends AppController
         $this->set('_serialize', ['movies']);
     //    echo json_encode($movies);exit;
     }
-
-
-
-
-
+    
     public function indexrest($limit = null)
     {
        $this->viewBuilder()->layout(false);
@@ -209,7 +205,7 @@ class MoviesController extends AppController
         
          foreach($lmovies as $key => $res)
                 {
-                    if(   date('Y-m-d',strtotime($res['created']))  >= date("Y-m-d") )
+                    if( $res['clicked']==0 )
                     {
                         $arr[]  = array('id' => $res['id']);
                        
@@ -220,6 +216,16 @@ class MoviesController extends AppController
         echo json_encode($arr);
         
         exit;
+    }
+    /*
+    * if user cliked the copy to clipboard button it automatically update the default value to 1 which is visited
+    */
+    public function visited($id = null)
+    {
+        if($id == null) exit;
+    
+        $this->Movies->query()->update()->set(['clicked' => 1])->where(['id' => $id])->execute();
+        
     }
     
     public function delete($id = null)

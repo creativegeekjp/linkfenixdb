@@ -3,44 +3,13 @@ namespace App\Controller;
 use Cake\ORM\TableRegistry;
 use App\Controller\AppController;
 
-/**
- * Seasons Controller
- *
- * @property \App\Model\Table\SeasonsTable $Seasons
- */
 class SeasonsController extends AppController
 {
 
-    /**
-     * Index method
-     *
-     * @return \Cake\Network\Response|null
-     */
-    public function index()
-    {
-        $seasons = $this->paginate($this->Seasons);
-
-        $this->set(compact('seasons'));
-        $this->set('_serialize', ['seasons']);
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Season id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $season = $this->Seasons->get($id, [
-            'contain' => ['Episodes', 'Tvshows']
-        ]);
-
-        $this->set('season', $season);
-        $this->set('_serialize', ['season']);
-    }
-    
+   
+    /*
+    * view list of episodes
+    */
     public function viewrest($id = null)
     {
         $tvshow = $this->Seasons->get($id, [
@@ -67,7 +36,7 @@ class SeasonsController extends AppController
               
                 foreach($queries['episodes'] as $key => $v)
                 {
-                     if(date('Y-m-d',strtotime($v['created'])) >= date("Y-m-d")  )
+                     if( $v['clicked']==0 )
                      {
                          $arrs[] = $queries['tvshow_id'];
                      }
@@ -107,13 +76,13 @@ class SeasonsController extends AppController
                 
                 foreach($queries['episodes'] as $key => $v)
                 {
-                    $tmp[$key+1] =  date('Y-m-d',strtotime($v['created']));
+                    $tmp[$key+1] = $v['clicked'];
                 }
                 $i++;
                 
                 foreach($tmp as $key => $res)
                 {
-                    if( $res >= date("Y-m-d") )
+                    if( $res == 0)
                     {
                           $lista = $tvshowS->find('all')->where(['id =' => $queries['tvshow_id'] ]) ;
                            
@@ -145,7 +114,7 @@ class SeasonsController extends AppController
             
                 foreach($value['episodes'] as $key => $v)
                 {
-                     if(date('Y-m-d',strtotime($v['created'])) >= date("Y-m-d")  )
+                     if($v['clicked']==0  )
                      {
                           $arrs[] = $v['season_id'];
                      }
@@ -184,7 +153,7 @@ class SeasonsController extends AppController
          
           foreach ($query as $key => $value) {
 
-                 if(date('Y-m-d',strtotime($value['created'])) >= date("Y-m-d")  )
+                 if($value['clicked']==0   )
                  {
                         $arrs[] = array('id' => $value['id'], 'ecode' => $value['ecode'] , 'title' => $value['title'] , 'episode_name' => $value['name']);
                  }
@@ -224,11 +193,46 @@ class SeasonsController extends AppController
         
         exit;
      }
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
     /**
-     * Add method
+     *  Code genereated 
      *
-     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
+     * 
      */
+    public function index()
+    {
+        $seasons = $this->paginate($this->Seasons);
+
+        $this->set(compact('seasons'));
+        $this->set('_serialize', ['seasons']);
+    }
+
+   
+    public function view($id = null)
+    {
+        $season = $this->Seasons->get($id, [
+            'contain' => ['Episodes', 'Tvshows']
+        ]);
+
+        $this->set('season', $season);
+        $this->set('_serialize', ['season']);
+    }
     public function add()
     {
         $season = $this->Seasons->newEntity();
@@ -247,8 +251,6 @@ class SeasonsController extends AppController
         $this->set('_serialize', ['season']);
     }
     
-     
-     
     public function edit($id = null)
     {
         $season = $this->Seasons->get($id, [
@@ -268,14 +270,6 @@ class SeasonsController extends AppController
         $this->set(compact('season', 'episodes', 'tvshows'));
         $this->set('_serialize', ['season']);
     }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Season id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
