@@ -3,46 +3,10 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 
-/**
- * Links Controller
- *
- * @property \App\Model\Table\LinksTable $Links
- */
+
 class LinksController extends AppController
 {
 
-    /**
-     * Index method
-     *
-     * @return \Cake\Network\Response|null
-     */
-    public function index()
-    {
-        $this->paginate = [
-            'contain' => ['Movies', 'Tvshows', 'Episodes']
-        ];
-        $links = $this->paginate($this->Links);
-
-        $this->set(compact('links'));
-        $this->set('_serialize', ['links']);
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Link id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $link = $this->Links->get($id, [
-            'contain' => ['Movies', 'Tvshows', 'Episodes']
-        ]);
-
-        $this->set('link', $link);
-        $this->set('_serialize', ['link']);
-    } 
     
     /*
     * get links by movie id
@@ -91,9 +55,71 @@ class LinksController extends AppController
         exit;
 
     }
-    /**
+    
+    
+    
+    
+    public function getmovielink($id = null)
+    {
+        if($id == null) exit;
+         
+        $conditions = array(
+            'conditions' => array(
+                'or' => array(
+                    'movie_id LIKE' => $id
+                )
+            )
+        );
+    
+        $episodes_links = $this->Links->find('all',$conditions);
+    
+        echo json_encode($episodes_links);
+        
+        exit; 
+        
+    } 
+    
+    public function gettvlink($id = null)
+    {
+        if($id == null) exit;
+         
+        $conditions = array(
+            'conditions' => array(
+                'or' => array(
+                    'tvshow_id LIKE' => $id
+                )
+            )
+        );
+    
+        $episodes_links = $this->Links->find('all',$conditions);
+    
+        echo json_encode($episodes_links);
+        
+        exit; 
+        
+    } 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /* code generated cake
      * Add method
      *
+     * 
+     */
     public function add()
     {
         $link = $this->Links->newEntity();
@@ -112,14 +138,26 @@ class LinksController extends AppController
         $this->set(compact('link', 'movies', 'tvshows', 'episodes'));
         $this->set('_serialize', ['link']);
     }
+    
+    public function index()
+    {
+        $this->paginate = [
+            'contain' => ['Movies', 'Tvshows', 'Episodes']
+        ];
+        $links = $this->paginate($this->Links);
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Link id.
-     * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
+        $this->set(compact('links'));
+        $this->set('_serialize', ['links']);
+    }
+    public function view($id = null)
+    {
+        $link = $this->Links->get($id, [
+            'contain' => ['Movies', 'Tvshows', 'Episodes']
+        ]);
+
+        $this->set('link', $link);
+        $this->set('_serialize', ['link']);
+    } 
     public function edit($id = null)
     {
         $link = $this->Links->get($id, [
@@ -140,14 +178,6 @@ class LinksController extends AppController
         $this->set(compact('link', 'movies', 'tvshows', 'episodes'));
         $this->set('_serialize', ['link']);
     }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Link id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);

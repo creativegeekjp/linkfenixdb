@@ -37,10 +37,12 @@ class LinksTable extends Table
         
         $this->belongsTo('Tvshows');
         
-        $this->belongsTo('Episodes', [
-            'foreignKey' => 'episode_id',
-            'joinType' => 'INNER'
-        ]);
+        $this->belongsTo('Episodes');
+        
+        //inali ni jino $this->belongsTo('Episodes', [
+        //     'foreignKey' => 'episode_id',
+        //     'joinType' => 'INNER'
+        // ]);
     }
 
     /**

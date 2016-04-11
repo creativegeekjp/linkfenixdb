@@ -194,9 +194,104 @@ class SeasonsController extends AppController
         exit;
      }
    
-   
-   
-   
+    /*
+    * query those tvshows that has only its seasons and new episodes
+    */
+    public function getlatesebytvshows()
+    {  
+        
+        $tvshowS= TableRegistry::get('tvshows');
+          
+        $query = $this->Seasons->find('all', [
+            'contain' => ['Episodes']
+        ]);
+        
+        foreach($query as $key => $queries)
+        {
+              
+                foreach($queries['episodes'] as $key => $v)
+                {
+                     if( $v['clicked']==0 )
+                     {
+                         $arrs[] = $queries['tvshow_id'];
+                     }
+                }
+        }
+        
+        foreach(array_unique($arrs) as $key => $res)
+        {
+         
+                    foreach ( $tvshowS->find('all')->where(['id =' => $res ]) as $value) 
+                        {
+                                 $arr[] = array('id' => $value['id'], 'clicked' => 0 , 'name' => $value['name']); //clicked == 0 meaning new published tvepisode
+                        }
+            
+         
+        }
+        echo json_encode(  $arr );
+       
+        exit;
+    }
+    /*
+    *  query those seasons that has only new episodes
+    */
+    public function getlatesebyseasons($id=null)
+    {  
+        $query = $this->Seasons->find('all', ['contain' => ['Episodes','Tvshows']])->where(['tvshow_id' => $id ]);
+        
+        foreach ($query as $key => $value) {
+            
+                foreach($value['episodes'] as $key => $v)
+                {
+                     if($v['clicked']==0  )
+                     {
+                          $arrs[] = $v['season_id'];
+                     }
+                    
+                }
+        }
+        foreach(array_unique($arrs) as $key => $res)
+        {
+                  $lista =  $this->Seasons->find('all')->where(['id =' => $res ]) ;
+                
+                    foreach ($lista as $value) 
+                        {
+                                 $arr[] = array(
+                                     'id' => $value['id'],
+                                     'season_name' => $value['name'], 
+                                     'clicked' => 0
+                                );
+                                
+                                
+                        }
+        }
+      
+        echo json_encode($arr);
+        
+        exit;
+    }
+    /*
+    *  query new episodes 
+    */
+    public function getlatesebyepisodes($id = null )
+    {
+        
+         $Episodes = TableRegistry::get('episodes');
+          
+         $query = $Episodes->find('all')->where(['season_id' => $id]) ;
+         
+          foreach ($query as $key => $value) {
+
+                 if($value['clicked']==0   )
+                 {
+                        $arrs[] = array('id' => $value['id'], 'clicked' => 0);
+                 }
+            }
+            
+          echo json_encode($arrs);
+        
+        exit;
+    }
    
    
    
