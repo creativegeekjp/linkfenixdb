@@ -228,6 +228,38 @@ class MoviesController extends AppController
         
     }
     
+    /*search movies to display links*/
+     public function search()
+    { 
+       $search = isset($_POST['search'])  ? $_POST['search'] : "" ;
+           
+        
+         $conditions = array(
+            'conditions' => array(
+                'and' => array(
+                    'name LIKE' => "$search%"
+                )
+            )
+        );
+        
+       
+        switch($search)
+        {
+            case 'null' :
+                 $movie = $this->Movies->find("all"); 
+            break;
+            
+            default :
+                 $movie = $this->Movies->find("all", $conditions);
+            break;
+        }
+        
+        $this->set('movie', $movie);
+        $this->set('_serialize', ['movie']);
+        
+        
+    }
+    
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);

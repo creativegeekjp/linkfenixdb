@@ -11,19 +11,7 @@ use App\Controller\AppController;
 class TvshowsController extends AppController
 {
 
-    /**
-     * Index method
-     *
-     * @return \Cake\Network\Response|null
-     */
-    public function index()
-    {
-        $tvshows = $this->paginate($this->Tvshows);
-
-        $this->set(compact('tvshows'));
-        $this->set('_serialize', ['tvshows']);
-    }
-
+   
     public function indexrest()
     {
        $this->viewBuilder()->layout(false);
@@ -56,22 +44,6 @@ class TvshowsController extends AppController
       
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Tvshow id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $tvshow = $this->Tvshows->get($id, [
-            'contain' => ['Seasons']
-        ]);
-
-        $this->set('tvshow', $tvshow);
-        $this->set('_serialize', ['tvshow']);
-    }
 
     public function viewrest($id = null)
     {
@@ -83,11 +55,52 @@ class TvshowsController extends AppController
         exit;
     }    
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
-     */
+
+    public function search()
+    { 
+        
+        $search = isset($_POST['search'])  ? $_POST['search'] : "" ;
+        
+         $conditions = array(
+            'conditions' => array(
+                'and' => array(
+                    'name LIKE' => "$search%"
+                )
+            )
+        );
+        
+       
+        switch($search)
+        {
+            case 'null' :
+                 $tvshow = $this->Tvshows->find("all"); 
+            break;
+            
+            default :
+                 $tvshow = $this->Tvshows->find("all", $conditions);
+            break;
+        }
+        
+        $this->set('tvshow', $tvshow);
+        $this->set('_serialize', ['tvshow']);
+    }
+
+    public function index()
+    {
+        $tvshows = $this->paginate($this->Tvshows);
+
+        $this->set(compact('tvshows'));
+        $this->set('_serialize', ['tvshows']);
+    }
+    public function view($id = null)
+    {
+        $tvshow = $this->Tvshows->get($id, [
+            'contain' => ['Seasons']
+        ]);
+
+        $this->set('tvshow', $tvshow);
+        $this->set('_serialize', ['tvshow']);
+    }
     public function add()
     {
         $tvshow = $this->Tvshows->newEntity();
@@ -104,14 +117,6 @@ class TvshowsController extends AppController
         $this->set(compact('tvshow', 'seasons'));
         $this->set('_serialize', ['tvshow']);
     }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Tvshow id.
-     * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function edit($id = null)
     {
         $tvshow = $this->Tvshows->get($id, [
@@ -130,14 +135,6 @@ class TvshowsController extends AppController
         $this->set(compact('tvshow', 'seasons'));
         $this->set('_serialize', ['tvshow']);
     }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Tvshow id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
