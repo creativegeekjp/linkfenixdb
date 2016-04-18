@@ -28,7 +28,7 @@
                 <td><?= h($movie->year) ?></td>
               
                 <td class="actions">
-                    <?= $this->Html->link(__('Load Links'), ['controller' => 'Links', 'action' => 'edit', $movie->id]) ?>
+                    <?= $this->Html->link(__('Load Links'), ['controller' => 'Links', 'action' => 'getmovielink', $movie->id]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

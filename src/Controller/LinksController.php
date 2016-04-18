@@ -58,6 +58,7 @@ class LinksController extends AppController
     
     
     
+    /* Display links for delete */
     
     public function getmovielink($id = null)
     {
@@ -71,11 +72,11 @@ class LinksController extends AppController
             )
         );
     
-        $episodes_links = $this->Links->find('all',$conditions);
-    
-        echo json_encode($episodes_links);
+        $links = $this->Links->find('all',$conditions);
         
-        exit; 
+        $this->set('links', $links);
+        $this->set('_serialize', ['links']);
+  
         
     } 
     
@@ -91,29 +92,46 @@ class LinksController extends AppController
             )
         );
     
-        $episodes_links = $this->Links->find('all',$conditions);
+        $links = $this->Links->find('all',$conditions);
     
-        echo json_encode($episodes_links);
-        
-        exit; 
+         
+        $this->set('links', $links);
+        $this->set('_serialize', ['links']);
         
     } 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+  
+   /*delete links*/
+    public function deletemovie($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $link = $this->Links->get($id);
+        if ($this->Links->delete($link)) {
+            $this->Flash->success(__('The link has been deleted.'));
+        } else {
+            $this->Flash->error(__('The link could not be deleted. Please, try again.'));
+        }
+        return $this->redirect(['controller' => 'Movies',  'action' => 'getmovielink']);
+    }
+   
+   public function deletetv($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $link = $this->Links->get($id);
+        if ($this->Links->delete($link)) {
+            $this->Flash->success(__('The link has been deleted.'));
+        } else {
+            $this->Flash->error(__('The link could not be deleted. Please, try again.'));
+        }
+        return $this->redirect(['controller' => 'Tvshows', 'action' => 'gettvlink']);
+    }
+   
+   
+   
+   
+   
+   
+   
+   
     
     /* code generated cake
      * Add method
